@@ -73,7 +73,7 @@ body {
 
 .board-row:after {
   clear: both;
-  content: '';
+  content: "";
   display: table;
 }
 
@@ -87,4 +87,20 @@ body {
 
 .game-info {
   margin-left: 20px;
+}
+
+.game-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  margin: solid;
+  color: white;
+  background-color: #201a1a; /* color de fondo suave */
+  padding: 12px 20px;
+  border-radius: 10px; /* bordes redondeados */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* sombra ligera */
+  width: 100%;
+  max-width: 500px; /* ancho máximo opcional */
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -9,6 +9,7 @@ function Scuare({ value, onSquareClick }) {
 }
 
 function Board({ xInNext, squares, onPlay }) {
+  const boardSize = 3;
   function handleClick(i) {
     if (squares[i] || calculateWinner(squares)) {
       return;
@@ -34,7 +35,7 @@ function Board({ xInNext, squares, onPlay }) {
   return (
     <>
       <div className="status">{status} </div>
-      <div className="board-row">
+      {/* <div className="board-row">
         <Scuare value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Scuare value={squares[1]} onSquareClick={() => handleClick(1)} />
         <Scuare value={squares[2]} onSquareClick={() => handleClick(2)} />
@@ -48,22 +49,40 @@ function Board({ xInNext, squares, onPlay }) {
         <Scuare value={squares[6]} onSquareClick={() => handleClick(6)} />
         <Scuare value={squares[7]} onSquareClick={() => handleClick(7)} />
         <Scuare value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
+      </div> */}
+      {Array.from({ length: boardSize }).map((_, row) => (
+        <div key={row} className="board-row">
+          {Array.from({ length: boardSize }).map((_, col) => {
+            const index = row * boardSize + col;
+            return (
+              <Scuare
+                key={index}
+                value={squares[index]}
+                onSquareClick={() => handleClick(index)}
+              />
+            );
+          })}
+        </div>
+      ))}
     </>
   );
 }
 
 export default function Game() {
-  const [xInNext, setXInNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
+  const [currentMove, setCurrentMove] = useState(0);
+  const xInNext = currentMove % 2 === 0;
+  const currentSquares = history[currentMove];
 
   function handlePlay(nextSquares) {
-    setHistory([...history, nextSquares]);
-    setXInNext(!xInNext);
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
   }
 
-  function jumpTo(nextMove) {}
+  function jumpTo(nextMove) {
+    setCurrentMove(nextMove);
+  }
 
   const moves = history.map((squares, move) => {
     let description;
@@ -80,12 +99,21 @@ export default function Game() {
   });
 
   return (
-    <div className="game">
-      <div className="game-board">
-        <Board xInNext={xInNext} squares={currentSquares} onPlay={handlePlay} />
+    <div className="game-container">
+      <div className="game">
+        <div className="game-board">
+          <Board
+            xInNext={xInNext}
+            squares={currentSquares}
+            onPlay={handlePlay}
+          />
+        </div>
+        <div className="game-info">
+          <ol>{moves}</ol>
+        </div>
       </div>
-      <div className="game-info">
-        <ol>{moves}</ol>
+      <div className="game-footer">
+        <p>Movimiento # {currentMove}</p>
       </div>
     </div>
   );
