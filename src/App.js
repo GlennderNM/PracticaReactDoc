@@ -63,13 +63,29 @@ export default function Game() {
     setXInNext(!xInNext);
   }
 
+  function jumpTo(nextMove) {}
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if (move > 0) {
+      description = "Ir al movimiento #" + move;
+    } else {
+      description = "Ir al inicio del juego";
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+
   return (
     <div className="game">
       <div className="game-board">
         <Board xInNext={xInNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{/**TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   );
